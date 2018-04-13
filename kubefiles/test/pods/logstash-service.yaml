@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    name: elk
+    org: org1
+  name: elk
+spec:
+  type: NodePort
+  ports:
+  - name: "http-logstash-org1"
+    port: 8080
+    nodePort: 31513
+  - name: "http-kibana-org1"
+    port: 5601
+    nodePort: 31514
+  - name: "elasticsearch-service-org1"
+    port: 9200
+    targetPort: 9200
+  selector:
+    name: elk

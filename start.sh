@@ -4,4 +4,4 @@ export KUBECONFIG=/Users/marek.bejda/.bluemix/plugins/container-service/clusters
 
 kubectl create -f kubefiles/ -R --namespace=default
 
-PUBLIC=`bx cs workers mycluster  | awk 'FNR == 3 { print $2 }'`
+PUBLIC=`bx cs workers MarekTestCluster  | awk 'FNR == 3 { print $2 }'`
