@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: elasticsearch-org1-es1
+  labels:
+      name: elasticsearch
+      org: org1
+      instance: es1
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      name: elasticsearch
+      org: org1
+      instance: es1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: elasticsearch
+        org: org1
+        instance: es1
+    spec:
+      containers:
+      - env:
+        - name: ES_JAVA_OPTS
+          value: -Xmx512m -Xms512m
+        - name: cluster.name
+          value: ORG1Cluster
+        - name: path.data
+          value: /usr/share/nfsShare/es1/data
+        - name: path.logs
+          value: /usr/share/nfsShare/es1/logs
+        - name: xpack.security.enabled
+          value: "false"
+        - name: xpack.monitoring.enabled
+          value: "false"
+        - name: xpack.graph.enabled
+          value: "false"
+        - name: xpack.ml.enabled
+          value: "false"
+        - name: xpack.watcher.enabled
+          value: "false"
+
+        image: marek5050/elasticsearch
+        name: elasticsearch
+        volumeMounts:
+        - name: nfsvol
+          mountPath: /usr/share/nfsShare
+        ports:
+        - containerPort: 9200
+        resources: {}
+      volumes:
+        - name: nfsvol
+          persistentVolumeClaim:
+            claimName: nfs-claim1-org1
+      restartPolicy: Always
+status: {}

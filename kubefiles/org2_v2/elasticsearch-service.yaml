@@ -4,8 +4,8 @@ metadata:
   creationTimestamp: null
   labels:
     name: elasticsearch
-    org: org1
-  name: elasticsearch
+    org: org2
+  name: elasticsearch-org2
 spec:
   ports:
   - name: "9200"
@@ -13,3 +13,4 @@ spec:
     targetPort: 9200
   selector:
     name: elasticsearch
+    org: org2

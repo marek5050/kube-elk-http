@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: logstash-org1-ls1
+  labels:
+      name: logstash
+      org: org1
+      instance: ls1
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: logstash
+        org: org1
+        instance: ls1
+    spec:
+      containers:
+      - env:
+        - name: LS_JAVA_OPTS
+          value: -Xmx256m -Xms256m
+        - name: CONFIG_RELOAD_AUTOMATIC
+          value: "TRUE"
+        - name: CONFIG_RELOAD_INTERVAL
+          value: "10"
+        - name: xpack.security.enabled
+          value: "false"
+        - name: xpack.monitoring.enabled
+          value: "false"
+        - name: xpack.graph.enabled
+          value: "false"
+        - name: xpack.reporting.enabled
+          value: "false"
+        - name: xpack.ml.enabled
+          value: "false"
+        - name: xpack.watcher.enabled
+          value: "false"
+        command: [ "/bin/sh" ]
+        args: ["-c", "env; ls -la /usr/share/logstash/pipeline; logstash -r -f /usr/share/logstash/pipeline/logstash.conf"]
+        image: marek5050/logstash
+        name: logstash
+        ports:
+        - containerPort: 8080
+        resources: {}
+        volumeMounts:
+        - name: nfsvol
+          mountPath: /usr/share/nfsShare
+        - name: config
+          mountPath: /usr/share/logstash/pipeline
+      volumes:
+      - name: nfsvol
+        persistentVolumeClaim:
+          claimName: nfs-claim1-org1
+      - name: config
+        configMap:
+          name: logstash-config
+          items:
+          - key: logstash.conf
+            path: logstash.conf
+status: {}

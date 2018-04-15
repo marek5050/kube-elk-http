@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: kibana-org1-k1
+  labels:
+        name: kibana
+        org: org1
+        instance: k1
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: kibana
+        org: org1
+        instance: k1
+    spec:
+      containers:
+      - image: marek5050/kibana
+        name: kibana
+        env:
+          - name: SERVER_NAME
+            value: "kibana-org1"
+          - name: server.host
+            value: "0"
+          - name: ELASTICSEARCH_URL
+            value: "http://elasticsearch-org1:9200"
+          - name: xpack.security.enabled
+            value: "false"
+          - name: xpack.monitoring.enabled
+            value: "false"
+          - name: xpack.graph.enabled
+            value: "false"
+          - name: xpack.reporting.enabled
+            value: "false"
+          - name: xpack.ml.enabled
+            value: "false"
+          - name: xpack.watcher.enabled
+            value: "false"
+
+        ports:
+        - containerPort: 5601
+        resources: {}
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/kibana/config
+      volumes:
+      - name: config
+        configMap:
+          name: kibana-config
+          items:
+          - key: kibana.yml
+            path: kibana.yml
+      restartPolicy: Always
+status: {}

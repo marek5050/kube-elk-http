@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: org2-k1-config
+  labels:
+    name: kibana
+    org: org2
+data:
+  kibana.yml: |-
+    ---
+    server.name: org2-k1
+    server.host: "0"
+    elasticsearch.url: http://elasticsearch-org2:9200

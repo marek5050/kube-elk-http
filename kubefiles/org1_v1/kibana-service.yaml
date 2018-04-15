@@ -5,13 +5,14 @@ metadata:
   labels:
     name: kibana
     org: org1
-  name: kibana
+  name: kibana-org1
 spec:
   ports:
   - name: "5601"
     port: 5601
     targetPort: 5601
-    nodePort: 30000
+    nodePort: 31515
   selector:
     name: kibana
+    org: org1
   type: NodePort
